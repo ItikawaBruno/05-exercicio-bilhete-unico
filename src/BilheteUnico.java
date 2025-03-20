@@ -1,7 +1,13 @@
+import java.text.DecimalFormat;
 import java.util.Random;
 
 public class BilheteUnico {
     private double saldo;
+
+    public long getId() {
+        return id;
+    }
+
     private long id;
     private Usuario usuario;
     private static final double TARIFA= 5.20;
@@ -11,7 +17,7 @@ public class BilheteUnico {
     public BilheteUnico(String nome, long cpf, String perfil) {
         usuario = new Usuario(nome, cpf, perfil);
         Random random = new Random();
-        id= random.nextLong(1000,10000);
+        id = random.nextLong(1000,10000);
     }
 
     public double recarga(double valor){
@@ -41,9 +47,12 @@ public class BilheteUnico {
         }
     }
 
+
+
     @Override
     public String toString(){
-        return "Nome: "+ usuario.getNome()+" Saldo: "+this.saldo;
+        DecimalFormat fP =new DecimalFormat("R$ 00,000.##");
+        return "Número: "+this.id+"\n Nome: "+ usuario.getNome()+"\n Saldo: "+fP.format(this.saldo)+"\n CPF: "+usuario.getCpf()+"\n Perfil: "+usuario.getPerfil()+"\n\n";
     }
 
 }
