@@ -1,6 +1,7 @@
 import java.text.DecimalFormat;
 import java.util.Random;
 
+
 public class BilheteUnico {
     private double saldo;
 
@@ -53,6 +54,10 @@ public class BilheteUnico {
     public String toString(){
         DecimalFormat fP =new DecimalFormat("R$ 00,000.##");
         return "Número: "+this.id+"\n Nome: "+ usuario.getNome()+"\n Saldo: "+fP.format(this.saldo)+"\n CPF: "+usuario.getCpf()+"\n Perfil: "+usuario.getPerfil()+"\n\n";
+    }
+
+    public long getCpf(){
+        return usuario.getCpf();
     }
 
 }

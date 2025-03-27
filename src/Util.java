@@ -12,6 +12,7 @@ import static java.lang.Integer.*;
 
 public class Util {
 
+    Scanner e = new Scanner(System.in);
     private BilheteUnico[] listaBilhetes = new BilheteUnico[2];
     private int index = 0;
 
@@ -34,44 +35,24 @@ public class Util {
 
     private void carregaUsuario(){
 
-        Scanner e = new Scanner(System.in);
-
-        String nome = showInputDialog("Digite seu nome: ");
-
-        long cpf = parseLong(showInputDialog("Digite seu CPF: "));
-        System.out.print("Digite seu perfil: ");
-        String perfil = e.next();
-        Usuario u = new Usuario(nome,cpf,perfil);
-        BilheteUnico b= new BilheteUnico(nome,cpf,perfil);
-
-
-
-        char resp = 'S';
-        while(resp == 'S'){
-            System.out.println("-------- MENU --------");
-            System.out.println("1- Recarga.\n"+
-                    "2- Verificar o saldo.\n"+
-                    "3- Passar na catraca.");
-
-            System.out.println("Digite a opção:");
-            int opcao = e.nextInt();
-            if(opcao == 1){
-                System.out.print("Digite o valor que deseja recarregar: ");
-                double valor = e.nextDouble();
-                b.recarga(valor);
-            }else if(opcao == 2){
-                System.out.println("Saldo atual - "+b.getSaldo());
+        int opcao = 0;
+        while(opcao != 4){
+            opcao = parseInt(showInputDialog("1- Recarga.\n"+ "2- Verificar o saldo.\n"+ "3- Passar na catraca."));
+            if (opcao < 1 || opcao > 4){
+                showMessageDialog(null,"Opção invalida \nDigite a opção de 1 a 4.");
             }else {
-                b.verificaPerfil();
-                b.passarNaCatraca();
+                if (opcao == 1) {
+                    carregaBilhete();
+                } else if (opcao == 2) {
+                    consultarSaldo();
+                } else if (opcao == 3) {
+                    passarNaCatraca();
+                }
             }
-
-            System.out.println("Deseja continuar?");
-            resp = e.next().toUpperCase().charAt(0);
-
         }
 
-        System.out.println(b.toString());
+        listaBilhetes[index].toString();
+        menuPrincipal();
 
     }
 
@@ -93,19 +74,23 @@ public class Util {
                     break;
                 case 3:
                     excluirBilhete();
-                    break;
             }
 
         }while(opcao != 4);
-        new Util().menuPrincipal();
+
     }
 
     private void excluirBilhete() {
-        long id=0;
-        id = parseLong(showInputDialog("Digite o numero do bilhete que deseja excluir"));
+        int resposta;
+        long cpf = parseLong(showInputDialog("Digite o cpf que deseja excluir"));
         for (int i = 0; i < index; i++) {
-            if(listaBilhetes[i].getId() == id){
-
+            if(listaBilhetes[i].getCpf() == cpf){
+                listaBilhetes[i]=listaBilhetes[index];
+                resposta = showConfirmDialog(null,"Tem certeza que deseja excluir?");
+                if( resposta == YES_OPTION){
+                    listaBilhetes[i] = listaBilhetes[index - 1];
+                    index --;
+                }
             }
         }
 
@@ -133,6 +118,36 @@ public class Util {
 
     }
 
+
+
+    private void carregaBilhete(){
+        long verifica = parseLong(showInputDialog("Digite seu cpf: "));
+        for (int i = 0; i < index; i++) {
+            if (listaBilhetes[i].getCpf() == verifica){
+                double valor = parseDouble(showInputDialog("Digite o valor do que deseja carregar"));
+                listaBilhetes[i].recarga(valor);
+            }
+        }
+    }
+
+    private void consultarSaldo(){
+        long verifica = parseLong(showInputDialog("Digite seu cpf: "));
+        for (int i = 0; i < index; i++) {
+            if (listaBilhetes[i].getCpf() == verifica){
+                showMessageDialog(null, "Saldo: " + listaBilhetes[i].getSaldo());
+            }
+        }
+
+    }
+
+    private void passarNaCatraca(){
+        long verifica = parseLong(showInputDialog("Digite seu cpf: "));
+        for (int i = 0; i < index; i++) {
+            if (listaBilhetes[i].getCpf() == verifica){
+                listaBilhetes[i].passarNaCatraca();
+            }
+        }
+    }
 
 
 
